@@ -1,2 +1,1 @@
-Git is a distributed version control system.
-Git is free software.
+If you hava a goog idea, please give your email. My email: moonlight_long@qq.com
