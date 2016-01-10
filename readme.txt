@@ -1,2 +1,1 @@
-#If you hava a goog idea, please give your email. My email: moonlight_long@qq.com
-hello, world
+如有问题可直接通过邮件联系我，邮箱地址：moonlight_long@outlook.com
