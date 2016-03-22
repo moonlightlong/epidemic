@@ -3,7 +3,7 @@ import numpy as np
 import random 
 import networkx as nx
 
-graph = nx.Graph()
+
 class Epidemic ():
     def __init__(self, infected_ratio= 0.01):
         
