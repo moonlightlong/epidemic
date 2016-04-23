@@ -56,7 +56,7 @@ class Epidemic ():
                     graph.node[i]['state'] = 'I'
                     inf_set.add(i)
         else:
-            beta = self.__sp_data['spread parameter']['lambda'] * self.__sp_data['spread parameter']['lambda']
+            beta = self.__sp_data['spread parameter']['lambda'] * self.__sp_data['spread parameter']['gamma']
             for i in self.__search_S(graph):
                 if random.random() < beta:
                     graph.node[i]['state'] = 'I'
@@ -162,13 +162,13 @@ if __name__ == '__main__':
     ep = Epidemic()
     
     # SI模型
-    data = ep.SI_epidemic_spread(ba, 0.05)
+ #   data = ep.SI_epidemic_spread(ba, 0.05)
 #     
 #     # SIR模型
 #     data = ep.SIR_epidemic_spread(ba, 0.4, 0.3)
 #     
 #     # SIS模型
-#     data = ep.SIS_epidemic_spread(ba, 0.5, 0.3)
+    data = ep.SIS_epidemic_spread(ba, 0.5, 0.3)
 #     
 #     #SIRS模型
 #     data = ep.SIRS_epidemic_spread(ba, 0.6, 0.1, 0.2)
