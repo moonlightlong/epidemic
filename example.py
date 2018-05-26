@@ -11,22 +11,20 @@ Reference:
 from __future__ import division, print_function, unicode_literals
 
 import argparse
-import random
-
-import numpy as np
 import networkx as nx
+import matplotlib.pyplot as plt
 
 from epidemic import SI, SIS, SIR, SIRS
 
 parser = argparse.ArgumentParser(description="SI spreading")
 
-parser.add_argument('--t', type=int, default=49)
-parser.add_argument('--n', type=int, default=20)
+parser.add_argument('--t', type=int, default=120, help="time")
+parser.add_argument('--n', type=int, default=20, help="run")
 parser.add_argument('--seed', type=int, default=0)
 
-parser.add_argument('--init_i', type=float, default=0.01)
-parser.add_argument('--infected_rate', type=float, default=0.2)
-parser.add_argument('--recover_rate', type=float, default=0.1)
+parser.add_argument('--init_i', type=float, default=0.01, help=" ")
+parser.add_argument('--infected_rate', type=float, default=0.01)
+parser.add_argument('--recover_rate', type=float, default=0.05)
 parser.add_argument('--lose_rate', type=float, default=0.3)
 
 conf = parser.parse_args()
@@ -34,11 +32,9 @@ graph = nx.generators.random_graphs.barabasi_albert_graph(20000, 4)
 
 # si = SI(graph, conf)
 # infected_d = si.spread()
+conf.infected_rate = 0.1
+sirs = SIRS(graph, conf)
+infected_d = sirs.spread(flags=True)
 
-sis = SIRS(graph, conf)
-infected_d = sis.spread()
-
-import matplotlib.pyplot as plt
-print(infected_d)
 plt.plot(infected_d)
 plt.show()
