@@ -10,18 +10,12 @@ Reference:
 '''
 from __future__ import division, print_function, unicode_literals
 
-import random
-
-import numpy as np
-import networkx as nx
-
 from model import Model
-
 
 class SI(Model):
     def __init__(self, graph, conf):
         super(SI, self).__init__(graph, conf)
-    
+
     def epidemic(self, infected, recover=None):
         new_infected = self.change_state(self.search_nearest_neighbor(infected, "S"),
                                          scale = self.infected_rate,
@@ -82,7 +76,7 @@ class SIRS(Model):
         self.node.update(dict().fromkeys(recover_infected, "R"))
 
         new_susceptible = self.change_state(recover,
-                                             scale=self.recover_rate,
+                                             scale=self.lose_rate,
                                              to_state="S")
         self.node.update(dict().fromkeys(new_susceptible, "S"))
 
