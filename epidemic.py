@@ -17,10 +17,23 @@ class SI(Model):
         super(SI, self).__init__(graph, conf)
 
     def epidemic(self, infected, recover=None):
+        """思路：
+        1.找到当前感染者的健康邻居列表L（只有这些节点才能被感染者感染）
+        2.按照感染率随机选取L中的部分节点感染
+        3.刷新感染节点集合
+        
+        Arguments:
+            infected {set} -- 感染节点集合
+        
+        Keyword Arguments:
+            recover {set} -- 免疫节点集合 (default: {None})
+        
+        Returns:
+            [set]
+        """
         new_infected = self.change_state(self.search_nearest_neighbor(infected, "S"),
                                          scale = self.infected_rate,
                                          to_state = "I")
-        self.node.update(dict().fromkeys(new_infected, "I"))
         infected.update(new_infected)
         return infected, recover
 
@@ -29,14 +42,27 @@ class SIS(Model):
         super(SIS, self).__init__(graph, conf)
     
     def epidemic(self, infected, recover=None):
+        """思路：
+        1.找到当前感染者的健康邻居列表L（只有这些节点才能被感染者感染）
+        2.按照感染率随机选取L中的部分节点感染
+        3.按照恢复速度将原感染节点列表中的部分节点恢复成易感节点
+        4.刷新感染节点集合
+        
+        Arguments:
+            infected {set} -- 感染节点集合
+        
+        Keyword Arguments:
+            recover {set} -- 免疫节点集合 (default: {None})
+        
+        Returns:
+            [set]
+        """
         new_infected = self.change_state(self.search_nearest_neighbor(infected, "S"),
                                          scale = self.infected_rate,
                                          to_state = "I")
-        self.node.update(dict().fromkeys(new_infected, "I"))
         recover_infected = self.change_state(infected,
                                              scale=self.recover_rate,
                                              to_state="S")
-        self.node.update(dict().fromkeys(recover_infected, "S"))
         infected.update(new_infected)
         infected = infected - recover_infected
         return infected, recover
@@ -46,15 +72,27 @@ class SIR(Model):
         super(SIR, self).__init__(graph, conf)
     
     def epidemic(self, infected, recover):
+        """思路：
+        1.找到当前感染者的健康邻居列表L（只有这些节点才能被感染者感染）
+        2.按照感染率随机选取L中的部分节点感染
+        3.按照恢复速度将原感染节点列表中的部分节点恢复成免疫节点
+        4.刷新感染节点集合和免疫节点集合
+        
+        Arguments:
+            infected {set} -- 感染节点集合
+        
+        Keyword Arguments:
+            recover {set} -- 免疫节点集合
+        Returns:
+            [set]
+        """
         new_infected = self.change_state(self.search_nearest_neighbor(infected, "S"),
                                          scale = self.infected_rate,
                                          to_state = "I")
-        self.node.update(dict().fromkeys(new_infected, "I"))
 
         recover_infected = self.change_state(infected,
                                              scale=self.recover_rate,
                                              to_state="R")
-        self.node.update(dict().fromkeys(recover_infected, "R"))
         infected.update(new_infected)
         infected = infected - recover_infected
         recover.update(recover_infected)
@@ -65,20 +103,32 @@ class SIRS(Model):
         super(SIRS, self).__init__(graph, conf)
     
     def epidemic(self, infected, recover):
+        """思路：
+        1.找到当前感染者的健康邻居列表L（只有这些节点才能被感染者感染）
+        2.按照感染率随机选取L中的部分节点感染
+        3.按照恢复速度将原感染节点列表中的部分节点恢复成免疫节点
+        4.按照丢失免疫速率将部分原免疫节点转变成易感节点
+        5.刷新感染节点集合和免疫节点集合
+        
+        Arguments:
+            infected {set} -- 感染节点集合
+        
+        Keyword Arguments:
+            recover {set} -- 免疫节点集合
+        Returns:
+            [set]
+        """
         new_infected = self.change_state(self.search_nearest_neighbor(infected, "S"),
                                          scale = self.infected_rate,
                                          to_state = "I")
-        self.node.update(dict().fromkeys(new_infected, "I"))
 
         recover_infected = self.change_state(infected,
                                              scale=self.recover_rate,
                                              to_state="R")
-        self.node.update(dict().fromkeys(recover_infected, "R"))
 
         new_susceptible = self.change_state(recover,
                                              scale=self.lose_rate,
                                              to_state="S")
-        self.node.update(dict().fromkeys(new_susceptible, "S"))
 
         infected.update(new_infected)
         infected = infected - recover_infected
